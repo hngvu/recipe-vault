@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme -->
+    <style name="Base.Theme.RecipeVault" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/primary_light_green</item>
+        <item name="colorOnPrimaryContainer">@color/primary_dark</item>
+
+        <item name="colorSecondary">@color/primary_green</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/primary_light_green</item>
+        <item name="colorOnSecondaryContainer">@color/primary_dark</item>
+
+        <item name="colorTertiary">@color/primary_dark</item>
+        <item name="colorOnTertiary">@color/white</item>
+
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/primary_dark</item>
+        <item name="colorSurfaceVariant">@color/gray_light</item>
+        <item name="colorOnSurfaceVariant">@color/gray_dark</item>
+
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorOnBackground">@color/primary_dark</item>
+
+        <item name="colorError">@color/error_red</item>
+        <item name="colorOnError">@color/white</item>
+    </style>
+
+    <style name="Theme.RecipeVault" parent="Base.Theme.RecipeVault" />
+</resources>

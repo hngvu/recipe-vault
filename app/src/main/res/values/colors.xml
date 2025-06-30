@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme Colors -->
+    <color name="primary_orange">#E67514</color>
+    <color name="primary_dark">#212121</color>
+    <color name="primary_green">#06923E</color>
+    <color name="primary_light_green">#D3ECCD</color>
+
+    <!-- Additional UI Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray_light">#F5F5F5</color>
+    <color name="gray_medium">#9E9E9E</color>
+    <color name="gray_dark">#424242</color>
+
+    <!-- Status Colors -->
+    <color name="error_red">#F44336</color>
+    <color name="warning_yellow">#FF9800</color>
+    <color name="success_green">#4CAF50</color>
+
+    <!-- Transparent Colors -->
+    <color name="black_overlay">#80000000</color>
+    <color name="white_overlay">#80FFFFFF</color>
+</resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "462053578661",
+    "project_id": "recipe-vault-cffa3",
+    "storage_bucket": "recipe-vault-cffa3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462053578661:android:72d3625cdbb33fbc6c7a4c",
+        "android_client_info": {
+          "package_name": "com.recipevault"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462053578661-2u79lmkqh6q91r250e29k2mljps7cmku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.recipevault",
+            "certificate_hash": "acf01bee3a60169c74006829fd3af0b7bd815776"
+          }
+        },
+        {
+          "client_id": "462053578661-l3ouqucd1r5d411hla7midts7i75qm2t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMqFFvz4rrXi_1MjeOnE_yLUanUAekJUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462053578661-l3ouqucd1r5d411hla7midts7i75qm2t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
