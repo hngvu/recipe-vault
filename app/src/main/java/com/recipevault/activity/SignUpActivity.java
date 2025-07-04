@@ -52,129 +52,141 @@ public class SignUpActivity extends AppCompatActivity {
         String password = binding.etPassword.getText().toString().trim();
         String confirmPassword = binding.etConfirmPassword.getText().toString().trim();
 
-        if (!validateInput(fullName, email, password, confirmPassword)) {
+        // Validate inputs
+        if (!validateInputs(fullName, email, password, confirmPassword)) {
             return;
         }
 
+        // Show loading
         showLoading(true);
+
+        // Create user with email and password
         authService.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    showLoading(false);
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "createUserWithEmail:success");
-                        FirebaseUser user = authService.getCurrentUser();
+                        FirebaseUser firebaseUser = authService.getCurrentUser();
+                        if (firebaseUser != null) {
+                            Log.d(TAG, "Email sign up successful: " + firebaseUser.getEmail());
 
-                        if (user != null) {
-                            // Create user profile
-                            authService.createUserProfile(user.getUid(), fullName, email, null)
-                                    .addOnCompleteListener(profileTask -> {
-                                        showLoading(false);
-                                        if (profileTask.isSuccessful()) {
-                                            Log.d(TAG, "User profile created");
-                                            Toast.makeText(SignUpActivity.this, "Account created successfully!",
-                                                    Toast.LENGTH_SHORT).show();
-                                            navigateToMain();
-                                        } else {
-                                            Log.w(TAG, "Failed to create user profile", profileTask.getException());
-                                            Toast.makeText(SignUpActivity.this, "Failed to create profile",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                            // Create user profile in Firestore
+                            createUserProfileInFirestore(firebaseUser, fullName);
                         }
                     } else {
-                        showLoading(false);
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(SignUpActivity.this, "Registration failed: " +
-                                task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Registration failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
+    private void createUserProfileInFirestore(FirebaseUser firebaseUser, String fullName) {
+        // Create user profile in Firestore
+        authService.createUserProfile(
+                firebaseUser.getUid(),
+                fullName,
+                firebaseUser.getEmail(),
+                firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : ""
+        ).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "User profile created successfully in Firestore");
+                Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+
+                // Save user info in SharedPreferences
+                saveUserToSharedPreferences(firebaseUser, fullName);
+
+                // Navigate to main activity
+                navigateToMainActivity();
+            } else {
+                Log.e(TAG, "Failed to create user profile", task.getException());
+                Toast.makeText(this, "Failed to create user profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveUserToSharedPreferences(FirebaseUser firebaseUser, String fullName) {
+        getSharedPreferences("RecipeVault", MODE_PRIVATE)
+                .edit()
+                .putBoolean("is_logged_in", true)
+                .putString("user_id", firebaseUser.getUid())
+                .putString("user_email", firebaseUser.getEmail())
+                .putString("user_name", fullName)
+                .apply();
+    }
+
     private void signUpWithGoogle() {
-        Intent signUpIntent = authService.getGoogleSignInIntent();
-        googleSignUpLauncher.launch(signUpIntent);
+        showLoading(true);
+        Intent signInIntent = authService.getGoogleSignInIntent();
+        googleSignUpLauncher.launch(signInIntent);
     }
 
     private void handleGoogleSignUpResult(Intent data) {
-        showLoading(true);
         try {
             authService.firebaseAuthWithGoogle(data)
                     .addOnCompleteListener(this, task -> {
                         showLoading(false);
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "signUpWithCredential:success");
-                            FirebaseUser user = authService.getCurrentUser();
+                            FirebaseUser firebaseUser = authService.getCurrentUser();
+                            if (firebaseUser != null) {
+                                Log.d(TAG, "Google sign up successful: " + firebaseUser.getEmail());
 
-                            if (user != null) {
-                                String displayName = user.getDisplayName();
-                                String email = user.getEmail();
-                                String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
-
-                                authService.createUserProfile(user.getUid(), displayName, email, photoUrl)
-                                        .addOnCompleteListener(profileTask -> {
-                                            if (profileTask.isSuccessful()) {
-                                                Log.d(TAG, "User profile created/updated");
-                                                Toast.makeText(SignUpActivity.this, "Account created successfully!",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                            navigateToMain();
-                                        });
-                            } else {
-                                navigateToMain();
+                                // Create user profile in Firestore
+                                createUserProfileInFirestore(firebaseUser, firebaseUser.getDisplayName());
                             }
                         } else {
-                            Log.w(TAG, "signUpWithCredential:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Google sign up failed: " +
-                                    task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Log.w(TAG, "Google sign up failed", task.getException());
+                            Toast.makeText(this, "Google sign up failed: " + task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
         } catch (Exception e) {
             showLoading(false);
-            Log.w(TAG, "Google sign up exception", e);
-            Toast.makeText(this, "Google sign up failed", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Google sign up error", e);
+            Toast.makeText(this, "Google sign up error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean validateInput(String fullName, String email, String password, String confirmPassword) {
-        boolean isValid = true;
-
+    private boolean validateInputs(String fullName, String email, String password, String confirmPassword) {
         if (!AuthService.isValidName(fullName)) {
-            binding.tilFullName.setError("Please enter your full name");
-            isValid = false;
-        } else {
-            binding.tilFullName.setError(null);
+            binding.etFullName.setError("Please enter your full name");
+            binding.etFullName.requestFocus();
+            return false;
         }
 
         if (!AuthService.isValidEmail(email)) {
-            binding.tilEmail.setError(getString(R.string.error_invalid_email));
-            isValid = false;
-        } else {
-            binding.tilEmail.setError(null);
+            binding.etEmail.setError("Please enter a valid email address");
+            binding.etEmail.requestFocus();
+            return false;
         }
 
         if (!AuthService.isValidPassword(password)) {
-            binding.tilPassword.setError(getString(R.string.error_weak_password));
-            isValid = false;
-        } else {
-            binding.tilPassword.setError(null);
+            binding.etPassword.setError("Password must be at least 6 characters");
+            binding.etPassword.requestFocus();
+            return false;
         }
 
         if (!password.equals(confirmPassword)) {
-            binding.tilConfirmPassword.setError(getString(R.string.error_password_mismatch));
-            isValid = false;
-        } else {
-            binding.tilConfirmPassword.setError(null);
+            binding.etConfirmPassword.setError("Passwords do not match");
+            binding.etConfirmPassword.requestFocus();
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
-    private void showLoading(boolean show) {
-        binding.progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-        binding.btnSignUp.setEnabled(!show);
-        binding.btnGoogleSignUp.setEnabled(!show);
+    private void showLoading(boolean isLoading) {
+        if (isLoading) {
+            binding.btnSignUp.setEnabled(false);
+            binding.btnSignUp.setText("Creating account...");
+            binding.btnGoogleSignUp.setEnabled(false);
+        } else {
+            binding.btnSignUp.setEnabled(true);
+            binding.btnSignUp.setText("Sign Up");
+            binding.btnGoogleSignUp.setEnabled(true);
+        }
     }
 
-    private void navigateToMain() {
+    private void navigateToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

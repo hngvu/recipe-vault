@@ -5,6 +5,7 @@
     <color name="primary_dark">#212121</color>
     <color name="primary_green">#06923E</color>
     <color name="primary_light_green">#D3ECCD</color>
+    <color name="primary">#E67514</color>
 
     <!-- Additional UI Colors -->
     <color name="white">#FFFFFF</color>
@@ -12,6 +13,9 @@
     <color name="gray_light">#F5F5F5</color>
     <color name="gray_medium">#9E9E9E</color>
     <color name="gray_dark">#424242</color>
+    <color name="gray">#757575</color>
+    <color name="orange">#E67514</color>
+    <color name="red">#F44336</color>
 
     <!-- Status Colors -->
     <color name="error_red">#F44336</color>
@@ -21,4 +25,8 @@
     <!-- Transparent Colors -->
     <color name="black_overlay">#80000000</color>
     <color name="white_overlay">#80FFFFFF</color>
+
+    <!-- Background Colors -->
+    <color name="background_light">#FAFAFA</color>
+    <color name="card_background">#FFFFFF</color>
 </resources>

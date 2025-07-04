@@ -80,4 +80,6 @@ dependencies {
     implementation("androidx.fragment:fragment:1.6.2")
     implementation("androidx.navigation:navigation-fragment:2.7.6")
     implementation("androidx.navigation:navigation-ui:2.7.6")
+
+    implementation("androidx.activity:activity:1.8.2")
 }

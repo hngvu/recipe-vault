@@ -15,5 +15,5 @@
     <string name="error_weak_password">Password should be at least 6 characters</string>
     <string name="error_password_mismatch">Passwords don\'t match</string>
     <string name="error_empty_fields">Please fill all fields</string>
-    <string name="default_web_client_id">1:462053578661:android:72d3625cdbb33fbc6c7a4c.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">462053578661-l3ouqucd1r5d411hla7midts7i75qm2t.apps.googleusercontent.com</string>
 </resources>
