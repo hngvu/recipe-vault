@@ -2,6 +2,7 @@ package com.recipevault.module;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import javax.inject.Singleton;
 
@@ -23,7 +24,11 @@ public class FirebaseModule {
     @Provides
     @Singleton
     public FirebaseFirestore provideFirebaseFirestore() {
-        return FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.setFirestoreSettings(new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build());
+        return db;
     }
 
 }
