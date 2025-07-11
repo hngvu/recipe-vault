@@ -22,6 +22,9 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.recipevault.R;
 import com.recipevault.adapter.IngredientsAdapter;
 import com.recipevault.adapter.InstructionsAdapter;
@@ -307,10 +310,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
         isFavorite = !isFavorite;
         fabFavorite.setImageResource(isFavorite ?
                 R.drawable.ic_favorite_filled : R.drawable.ic_favorite_outline);
+        String userId = firebaseAuth.getUid();
 
-        Toast.makeText(this,
-                isFavorite ? "Added to favorites" : "Removed from favorites",
-                Toast.LENGTH_SHORT).show();
+        DocumentReference userRef = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId);
+        userRef.update("savedRecipes", isFavorite ?
+                FieldValue.arrayUnion(recipeId) :
+                FieldValue.arrayRemove(recipeId)
+        ).addOnSuccessListener(unused -> {
+            Log.d("Favorite", "Favorite updated");
+            Toast.makeText(this,
+                    isFavorite ? "Added to favorites" : "Removed from favorites",
+                    Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            Log.e("Favorite", "Failed to update favorite", e);
+            Toast.makeText(this,
+                    "Failed to update favorite status",
+                    Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
