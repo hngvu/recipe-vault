@@ -44,5 +44,8 @@
             android:name=".activity.RecipeDetailActivity"
             android:exported="false" />
 
+        <activity android:name=".activity.FavoritesActivity"
+            android:exported="false" />
+
     </application>
 </manifest>

@@ -18,10 +18,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.recipevault.activity.AddRecipeActivity;
+import com.recipevault.activity.FavoritesActivity;
 import com.recipevault.activity.ProfileActivity;
 import com.recipevault.activity.RecipeDetailActivity;
+import com.recipevault.activity.SearchActivity;
 import com.recipevault.activity.SignInActivity;
 import com.recipevault.adapter.RecipeAdapter;
 import com.recipevault.model.Recipe;
@@ -150,8 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 // Already on home
                 return true;
             } else if (itemId == R.id.nav_search) {
-                // TODO: Navigate to SearchActivity
-                Toast.makeText(this, "Search feature coming soon", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SearchActivity.class));
                 return true;
             } else if (itemId == R.id.nav_add) {
                 // Navigate to AddRecipeActivity
@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_favorites) {
-                // TODO: Navigate to FavoritesActivity
-                Toast.makeText(this, "Favorites feature coming soon", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 // Navigate to ProfileActivity

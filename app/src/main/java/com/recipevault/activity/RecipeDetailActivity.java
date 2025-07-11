@@ -67,8 +67,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
             return;
         }
 
-        getIntentData();
         initViews();
+        getIntentData();
         setupToolbar();
         setupRecyclerViews();
         setupClickListeners();
@@ -91,6 +91,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         recipeId = intent.getStringExtra("recipe_id");
         recipeTitle = intent.getStringExtra("recipe_title");
+        isFavorite = intent.getBooleanExtra("is_favorite", false);
+        updateFavoriteIcon();
     }
 
     private void initViews() {
@@ -202,6 +204,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
             rvInstructions.setVisibility(View.VISIBLE);
             chipGroupTags.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void updateFavoriteIcon() {
+        Log.d("RecipeDetailActivity", "Updating favorite icon state with " + isFavorite);
+        fabFavorite.setImageResource(isFavorite ?
+                R.drawable.ic_favorite_filled :
+                R.drawable.ic_favorite_outline);
     }
 
     private void displayRecipeDetails() {
