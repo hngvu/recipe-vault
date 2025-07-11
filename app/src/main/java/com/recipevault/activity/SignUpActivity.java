@@ -14,10 +14,16 @@ import com.recipevault.R;
 import com.recipevault.databinding.ActivitySignUpBinding;
 import com.recipevault.service.AuthService;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     private ActivitySignUpBinding binding;
-    private AuthService authService;
+    @Inject
+    AuthService authService;
 
     private ActivityResultLauncher<Intent> googleSignUpLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -34,7 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        authService = AuthService.getInstance();
         authService.initializeGoogleSignIn(this);
 
         setupClickListeners();

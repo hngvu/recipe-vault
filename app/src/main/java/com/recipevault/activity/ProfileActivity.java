@@ -19,13 +19,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.recipevault.MainActivity;
 import com.recipevault.R;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ProfileActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private TextView tvUserName, tvUserEmail;
     private LinearLayout btnSignOut, btnEditProfile, btnMyRecipes, btnSettings;
     private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth firebaseAuth;
+    @Inject
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     private void setupClickListeners() {

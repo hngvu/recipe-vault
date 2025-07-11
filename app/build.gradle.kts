@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
+    alias(libs.plugins.dagger.hilt)
 }
 
 android {
@@ -49,6 +50,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(libs.hilt.android)
+    annotationProcessor(libs.hilt.compiler)
 
     // Update Firebase BOM to latest version
     implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
