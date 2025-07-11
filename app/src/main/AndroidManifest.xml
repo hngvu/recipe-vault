@@ -36,7 +36,9 @@
 
         <activity
             android:name=".activity.AddRecipeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"
+            />
 
         <activity
             android:name=".activity.RecipeDetailActivity"

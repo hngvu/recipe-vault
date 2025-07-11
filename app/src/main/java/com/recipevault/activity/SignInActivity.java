@@ -29,11 +29,21 @@ import com.recipevault.service.FirestoreService;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+
+@AndroidEntryPoint
 public class SignInActivity extends AppCompatActivity {
 
     private static final String TAG = "SignInActivity";
     private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth firebaseAuth;
+
+    @Inject
+    FirebaseAuth firebaseAuth;
+    @Inject
+    FirestoreService firestoreService;
     private Button btnSignIn;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -72,7 +82,6 @@ public class SignInActivity extends AppCompatActivity {
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-        firebaseAuth = FirebaseAuth.getInstance(); // Add Firebase Auth
     }
 
     private void setupClickListeners() {
@@ -160,7 +169,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void createOrUpdateUserInFirestore(FirebaseUser firebaseUser) {
-        FirestoreService firestoreService = FirestoreService.getInstance();
 
         // Check if user already exists in Firestore
         firestoreService.getUser(firebaseUser.getUid())
@@ -194,7 +202,6 @@ public class SignInActivity extends AppCompatActivity {
         user.setCreatedAt(System.currentTimeMillis());
 
         // Save to Firestore
-        FirestoreService firestoreService = FirestoreService.getInstance();
         firestoreService.createUser(user)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "User document created successfully in Firestore");
@@ -206,7 +213,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void updateUserLastLogin(String userId) {
-        FirestoreService firestoreService = FirestoreService.getInstance();
         Map<String, Object> updates = new HashMap<>();
         updates.put("lastLoginAt", System.currentTimeMillis());
 

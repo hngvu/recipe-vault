@@ -16,25 +16,24 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.recipevault.R;
 import com.recipevault.model.User;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+
+@Singleton
 public class AuthService {
-    private static AuthService instance;
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
     private FirestoreService firestoreService;
 
     public static final int RC_SIGN_IN = 9001;
 
-    private AuthService() {
-        mAuth = FirebaseAuth.getInstance();
-        firestoreService = FirestoreService.getInstance();
+    @Inject
+    public AuthService(FirebaseAuth mAuth, FirestoreService firestoreService) {
+        this.mAuth = mAuth;
+        this.firestoreService = firestoreService;
     }
 
-    public static synchronized AuthService getInstance() {
-        if (instance == null) {
-            instance = new AuthService();
-        }
-        return instance;
-    }
 
     public void initializeGoogleSignIn(Activity activity) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

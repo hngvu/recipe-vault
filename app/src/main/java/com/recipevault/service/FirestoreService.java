@@ -15,8 +15,11 @@ import com.recipevault.model.CookingReminder;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class FirestoreService {
-    private static FirestoreService instance;
     private FirebaseFirestore db;
 
     // Collection names
@@ -26,15 +29,9 @@ public class FirestoreService {
     public static final String RATINGS_COLLECTION = "ratings";
     public static final String REMINDERS_COLLECTION = "cooking_reminders";
 
-    private FirestoreService() {
-        db = FirebaseFirestore.getInstance();
-    }
-
-    public static synchronized FirestoreService getInstance() {
-        if (instance == null) {
-            instance = new FirestoreService();
-        }
-        return instance;
+    @Inject
+    public FirestoreService(FirebaseFirestore db) {
+        this.db = db;
     }
 
     // User operations

@@ -28,6 +28,11 @@ import com.recipevault.adapter.InstructionsAdapter;
 import com.recipevault.model.Recipe;
 import com.recipevault.service.FirestoreService;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private MaterialToolbar toolbar;
@@ -42,18 +47,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private String recipeId;
     private String recipeTitle;
     private Recipe currentRecipe;
-    private FirestoreService firestoreService;
     private IngredientsAdapter ingredientsAdapter;
     private InstructionsAdapter instructionsAdapter;
-    private FirebaseAuth firebaseAuth;
+    @Inject
+    FirestoreService firestoreService;
+    @Inject
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        firestoreService = FirestoreService.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
 
         // Check authentication before proceeding
         if (!isUserAuthenticated()) {

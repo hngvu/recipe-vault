@@ -32,6 +32,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private MaterialToolbar toolbar;
@@ -40,15 +45,16 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout emptyState;
     private BottomNavigationView bottomNavigation;
     private RecipeAdapter recipeAdapter;
-    private FirestoreService firestoreService;
-    private FirebaseAuth firebaseAuth;
+
+    @Inject
+    FirestoreService firestoreService;
+    @Inject
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        firestoreService = FirestoreService.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
 
         // Check if user is authenticated
         if (isUserAuthenticated()) {
