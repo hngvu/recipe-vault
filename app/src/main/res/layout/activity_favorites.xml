@@ -4,22 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_light"
     tools:context=".activity.FavoritesActivity">
 
+    <!-- App Bar with Collapsing Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/primary_orange">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="Favorites"
-            app:titleTextColor="@color/white"
-            android:background="@color/primary_orange" />
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/primary_orange"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <!-- Header Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingTop="56dp"
+                app:layout_collapseMode="parallax">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Favorites"
+                    android:textColor="@color/white"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your saved recipes collection"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:alpha="0.9"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Filter Chips -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_filters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipSpacing="8dp"
+                        app:singleSelection="true" />
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+            <!-- Toolbar -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Favorites"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:layout_collapseMode="pin" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Main Content -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
@@ -33,50 +92,101 @@
             android:layout_height="match_parent"
             android:padding="8dp"
             android:clipToPadding="false"
+            android:scrollbars="vertical"
             tools:listitem="@layout/item_recipe" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- Empty State -->
     <LinearLayout
         android:id="@+id/empty_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone">
 
-        <ImageView
+        <!-- Empty State Icon -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_favorite"
-            android:alpha="0.3"
-            app:tint="@color/gray" />
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/primary_light_green">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_favorite"
+                android:alpha="0.6"
+                app:tint="@color/primary_orange"
+                android:contentDescription="No Favorites" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No favorites yet"
-            android:textSize="18sp"
-            android:textColor="@color/gray"
-            android:layout_marginTop="16dp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_dark"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Heart recipes to add them here!"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@color/gray"
-            android:layout_marginTop="8dp" />
+            android:textAlignment="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Call to Action Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_explore_recipes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explore Recipes"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/primary_orange"
+            app:cornerRadius="24dp"
+            app:icon="@drawable/ic_search"
+            app:iconGravity="textStart"
+            android:paddingHorizontal="24dp"
+            android:onClick="onExploreRecipesClick" />
 
     </LinearLayout>
 
+    <!-- Floating Action Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="96dp"
+        android:contentDescription="Add Recipe"
+        app:srcCompat="@drawable/ic_add"
+        app:backgroundTint="@color/primary_orange"
+        app:tint="@color/white"
+        app:elevation="6dp" />
+
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="@color/black"
         app:menu="@menu/bottom_navigation"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color" />
+        app:itemIconTint="@color/bottom_nav_icon_selector"
+        app:labelVisibilityMode="unlabeled"
+        app:elevation="8dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
