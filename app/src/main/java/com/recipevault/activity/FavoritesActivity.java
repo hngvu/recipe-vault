@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.recipevault.MainActivity;
 import com.recipevault.R;
 import com.recipevault.adapter.RecipeAdapter;
-import com.recipevault.service.FavoriteService;
+import com.recipevault.service.RecipeService;
 
 import javax.inject.Inject;
 
@@ -41,7 +41,7 @@ public class FavoritesActivity extends AppCompatActivity {
     @Inject
     FirebaseAuth firebaseAuth;
     @Inject
-    FavoriteService favoriteService;
+    RecipeService recipeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +153,7 @@ public class FavoritesActivity extends AppCompatActivity {
         }
 
         String userId = currentUser.getUid();
-        favoriteService.getFavoriteRecipes(
+        recipeService.getFavoriteRecipes(
                 userId,
                 recipes -> {
                     swipeRefresh.setRefreshing(false);
