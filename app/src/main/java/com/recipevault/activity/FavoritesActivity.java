@@ -103,6 +103,7 @@ public class FavoritesActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RecipeDetailActivity.class);
             intent.putExtra("recipe_id", recipe.getId());
             intent.putExtra("recipe_title", recipe.getTitle());
+            intent.putExtra("is_favorite", true);
             startActivity(intent);
         });
         rvFavorites.setAdapter(recipeAdapter);

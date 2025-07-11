@@ -1,10 +1,13 @@
 package com.recipevault.repository;
 
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.*;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,11 +137,24 @@ public class FirestoreRepository<T> {
                     List<T> results = new ArrayList<>();
                     for (DocumentSnapshot doc : snapshot.getDocuments()) {
                         T item = doc.toObject(modelClass);
-                        results.add(item);
+                        if (item != null) {
+                            injectDocumentIdIfPossible(item, doc.getId());
+                            results.add(item);
+                        }
                     }
                     onSuccess.onSuccess(results);
                 })
                 .addOnFailureListener(onFailure);
     }
+
+    private void injectDocumentIdIfPossible(T item, String documentId) {
+        try {
+            Method setIdMethod = item.getClass().getMethod("setId", String.class);
+            setIdMethod.invoke(item, documentId);
+        } catch (Exception e) {
+            Log.e("FirestoreRepository", "Failed to inject document ID", e);
+        }
+    }
+
 
 }
