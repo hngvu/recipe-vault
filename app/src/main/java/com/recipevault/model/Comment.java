@@ -1,5 +1,10 @@
 package com.recipevault.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class Comment {
     private String commentId;
     private String userId;
@@ -8,15 +13,20 @@ public class Comment {
     private String text;
     private long timestamp;
     private int likeCount;
+    private String recipeId;
+    private List<String> likedUserIds;
 
-    public Comment() {} // Required for Firestore
+    public Comment() {
+    } // Required for Firestore
 
-    public Comment(String userId, String username, String text) {
+    public Comment(String userId, String username, String text, String recipeId) {
         this.userId = userId;
         this.username = username;
         this.text = text;
+        this.recipeId = recipeId;
         this.timestamp = System.currentTimeMillis();
         this.likeCount = 0;
+        this.likedUserIds = new ArrayList<>();
     }
 
     // Getters and setters
@@ -40,4 +50,15 @@ public class Comment {
 
     public int getLikeCount() { return likeCount; }
     public void setLikeCount(int likeCount) { this.likeCount = likeCount; }
+
+    public String getRecipeId() { return recipeId; }
+    public void setRecipeId(String recipeId) { this.recipeId = recipeId; }
+
+    public List<String> getLikedUserIds() {
+        return likedUserIds;
+    }
+
+    public void setLikedUserIds(List<String> likedUserIds) {
+        this.likedUserIds = likedUserIds;
+    }
 }
