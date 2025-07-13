@@ -3,7 +3,6 @@ package com.recipevault.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Comment {
     private String commentId;
@@ -15,11 +14,12 @@ public class Comment {
     private int likeCount;
     private String recipeId;
     private List<String> likedUserIds;
+    private float rating;
 
     public Comment() {
     } // Required for Firestore
 
-    public Comment(String userId, String username, String text, String recipeId) {
+    public Comment(String userId, String username, String text, String recipeId, float rating) {
         this.userId = userId;
         this.username = username;
         this.text = text;
@@ -27,6 +27,7 @@ public class Comment {
         this.timestamp = System.currentTimeMillis();
         this.likeCount = 0;
         this.likedUserIds = new ArrayList<>();
+        this.rating = rating;
     }
 
     // Getters and setters
@@ -61,4 +62,7 @@ public class Comment {
     public void setLikedUserIds(List<String> likedUserIds) {
         this.likedUserIds = likedUserIds;
     }
+
+    public float getRating() { return rating; }
+    public void setRating(float rating) { this.rating = rating; }
 }

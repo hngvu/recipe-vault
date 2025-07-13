@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,8 +71,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivUserAvatar, ivLike;
-        private TextView tvUserName, tvCommentDate, tvCommentText, tvCommentTime, tvLikeCount;
+        private ImageView ivUserAvatar;
+        private TextView tvUserName, tvCommentDate, tvCommentText, tvCommentTime;
+        private RatingBar ratingBarComment;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,8 +82,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             tvCommentDate = itemView.findViewById(R.id.tv_comment_date);
             tvCommentText = itemView.findViewById(R.id.tv_comment_text);
             tvCommentTime = itemView.findViewById(R.id.tv_comment_time);
-            ivLike = itemView.findViewById(R.id.iv_like);
-            tvLikeCount = itemView.findViewById(R.id.tv_like_count);
+            ratingBarComment = itemView.findViewById(R.id.rating_bar_comment);
         }
 
         public void bind(Comment comment) {
@@ -103,17 +104,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             } else {
                 ivUserAvatar.setImageResource(R.drawable.ic_person);
             }
-            // Like count
-            tvLikeCount.setText(String.valueOf(comment.getLikeCount()));
-            // Like icon state
-            boolean liked = comment.getLikedUserIds() != null && currentUserId != null && comment.getLikedUserIds().contains(currentUserId);
-            ivLike.setImageResource(liked ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
-            // Like click
-            ivLike.setOnClickListener(v -> {
-                if (likeClickListener != null) {
-                    likeClickListener.onLikeClick(comment, getAdapterPosition(), !liked);
-                }
-            });
+            ratingBarComment.setRating(comment.getRating());
+//            // Like count
+//            tvLikeCount.setText(String.valueOf(comment.getLikeCount()));
+//            // Like icon state
+//            boolean liked = comment.getLikedUserIds() != null && currentUserId != null && comment.getLikedUserIds().contains(currentUserId);
+//            ivLike.setImageResource(liked ? R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
+//            // Like click
+//            ivLike.setOnClickListener(v -> {
+//                if (likeClickListener != null) {
+//                    likeClickListener.onLikeClick(comment, getAdapterPosition(), !liked);
+//                }
+//            });
         }
     }
 } 

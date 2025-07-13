@@ -50,6 +50,17 @@
                 android:textColor="@color/gray_light"
                 tools:text="2 days ago" />
         </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/rating_bar_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            android:rating="0"
+            android:layout_marginTop="4dp"
+            style="?android:attr/ratingBarStyleSmall"/>
     </LinearLayout>
 
     <!-- Comment Text -->
@@ -81,32 +92,32 @@
             tools:text="2 hours ago" />
 
         <!-- Like Icon and Count -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center_vertical">-->
 
-            <ImageView
-                android:id="@+id/iv_like"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_favorite_border"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="Like"
-                app:tint="@color/red" />
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_like"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:src="@drawable/ic_favorite_border"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:contentDescription="Like"-->
+<!--                app:tint="@color/red" />-->
 
-            <TextView
-                android:id="@+id/tv_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="12sp"
-                android:textColor="@color/red"
-                android:gravity="center"
-                android:layout_marginStart="4dp" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/tv_like_count"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="0"-->
+<!--                android:textSize="12sp"-->
+<!--                android:textColor="@color/red"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_marginStart="4dp" />-->
+<!--        </LinearLayout>-->
     </LinearLayout>
 
     <!-- Divider -->

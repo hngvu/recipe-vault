@@ -41,6 +41,7 @@ import com.recipevault.adapter.IngredientsAdapter;
 import com.recipevault.adapter.InstructionsAdapter;
 import com.recipevault.model.Comment;
 import com.recipevault.model.Recipe;
+import com.recipevault.service.CommentService;
 import com.recipevault.service.FirestoreService;
 
 import javax.inject.Inject;
@@ -73,6 +74,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     FirestoreService firestoreService;
     @Inject
     FirebaseAuth firebaseAuth;
+    @Inject
+    CommentService commentService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,37 +344,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
         if (recipeId == null || recipeId.isEmpty()) {
             return;
         }
-
-        FirebaseFirestore.getInstance()
-                .collection("recipes")
-                .document(recipeId)
-                .collection("comments")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Comment> comments = new ArrayList<>();
-                    try {
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            Comment comment = document.toObject(Comment.class);
-                            if (comment != null) {
-                                comment.setCommentId(document.getId());
-                                comments.add(comment);
-                            } else {
-                                Log.w("Firestore", "Comment is null for document: " + document.getId());
-                            }
-                        }
-                        commentAdapter.setComments(comments);
-                        updateCommentsUI(comments.size());
-                    } catch (Exception e) {
-                        Log.e("Firestore", "Error parsing comments", e);
-                        Toast.makeText(this, "Failed to load some comments", Toast.LENGTH_SHORT).show();
-                    }
-                    
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("RecipeDetailActivity", "Failed to load comments", e);
-                    Toast.makeText(this, "Failed to load comments", Toast.LENGTH_SHORT).show();
-                });
+        commentService.loadComments(recipeId, new CommentService.CommentListCallback() {
+            @Override
+            public void onSuccess(List<Comment> comments) {
+                commentAdapter.setComments(comments);
+                updateCommentsUI(comments.size());
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("RecipeDetailActivity", "Failed to load comments", e);
+                Toast.makeText(RecipeDetailActivity.this, "Failed to load comments", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateCommentsUI(int commentCount) {
@@ -390,37 +374,29 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Please sign in to rate and comment", Toast.LENGTH_SHORT).show();
             return;
         }
-
         float rating = ratingBar.getRating();
         String commentText = etComment.getText().toString().trim();
-
         if (rating == 0) {
             Toast.makeText(this, "Please select a rating", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (commentText.isEmpty()) {
             Toast.makeText(this, "Please enter a comment", Toast.LENGTH_SHORT).show();
             return;
         }
-
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         String userId = currentUser.getUid();
         String username = currentUser.getDisplayName();
         if (username == null || username.isEmpty()) {
             username = currentUser.getEmail();
         }
-
         Map<String, Object> ratingData = new java.util.HashMap<>();
         ratingData.put("userId", userId);
         ratingData.put("rating", rating);
         ratingData.put("timestamp", System.currentTimeMillis());
-
-        Comment comment = new Comment(userId, username, commentText, recipeId);
+        Comment comment = new Comment(userId, username, commentText, recipeId, rating);
         comment.setUserAvatarUrl(currentUser.getPhotoUrl() != null ? currentUser.getPhotoUrl().toString() : null);
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        
         // Submit rating
         db.collection("recipes")
                 .document(recipeId)
@@ -429,28 +405,24 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 .set(ratingData)
                 .addOnSuccessListener(aVoid -> {
                     // Submit comment after rating is successful
-                    db.collection("recipes")
-                            .document(recipeId)
-                            .collection("comments")
-                            .add(comment)
-                            .addOnSuccessListener(documentReference -> {
-                                comment.setCommentId(documentReference.getId());
-                                commentAdapter.addComment(comment);
-                                updateCommentsUI(commentAdapter.getItemCount());
-                                
-                                // Clear the form
-                                ratingBar.setRating(0);
-                                tvRatingText.setText("0.0");
-                                etComment.setText("");
-                                
-                                Toast.makeText(this, "Rating and comment submitted successfully!", Toast.LENGTH_SHORT).show();
-                                
-                                loadRecipeDetails();
-                            })
-                            .addOnFailureListener(e -> {
-                                Log.e("RecipeDetailActivity", "Failed to submit comment", e);
-                                Toast.makeText(this, "Rating submitted but comment failed", Toast.LENGTH_SHORT).show();
-                            });
+                    commentService.addComment(recipeId, comment, new CommentService.CommentActionCallback() {
+                        @Override
+                        public void onSuccess(Comment addedComment) {
+                            commentAdapter.addComment(addedComment);
+                            updateCommentsUI(commentAdapter.getItemCount());
+                            // Clear the form
+                            ratingBar.setRating(0);
+                            tvRatingText.setText("0.0");
+                            etComment.setText("");
+                            Toast.makeText(RecipeDetailActivity.this, "Rating and comment submitted successfully!", Toast.LENGTH_SHORT).show();
+                            loadRecipeDetails();
+                        }
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.e("RecipeDetailActivity", "Failed to submit comment", e);
+                            Toast.makeText(RecipeDetailActivity.this, "Rating submitted but comment failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 })
                 .addOnFailureListener(e -> {
                     Log.e("RecipeDetailActivity", "Failed to submit rating", e);
@@ -489,27 +461,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Please sign in to like comments", Toast.LENGTH_SHORT).show();
             return;
         }
-        // Firestore update
-        DocumentReference commentRef = FirebaseFirestore.getInstance()
-                .collection("recipes")
-                .document(comment.getRecipeId())
-                .collection("comments")
-                .document(comment.getCommentId());
-        FieldValue arrayOp = liked ?
-                FieldValue.arrayUnion(userId) :
-                FieldValue.arrayRemove(userId);
         int newLikeCount = liked ? comment.getLikeCount() + 1 : Math.max(0, comment.getLikeCount() - 1);
-        java.util.Map<String, Object> updates = new java.util.HashMap<>();
-        updates.put("likedUserIds", arrayOp);
-        updates.put("likeCount", newLikeCount);
-        commentRef.update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    // Update U
-                    commentAdapter.notifyItemChanged(position);
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to update like", Toast.LENGTH_SHORT).show();
-                });
+        commentService.likeComment(comment.getRecipeId(), comment.getCommentId(), userId, liked, newLikeCount, new CommentService.LikeActionCallback() {
+            @Override
+            public void onSuccess() {
+                commentAdapter.notifyItemChanged(position);
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(RecipeDetailActivity.this, "Failed to update like", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
