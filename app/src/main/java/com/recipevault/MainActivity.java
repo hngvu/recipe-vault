@@ -27,6 +27,7 @@ import com.recipevault.activity.SignInActivity;
 import com.recipevault.adapter.RecipeAdapter;
 import com.recipevault.model.Recipe;
 import com.recipevault.service.FirestoreService;
+import com.recipevault.service.RecipeService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     FirestoreService firestoreService;
     @Inject
     FirebaseAuth firebaseAuth;
+    @Inject
+    RecipeService recipeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +134,25 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Recipe ID is missing", Toast.LENGTH_SHORT).show();
                 return;
             }
+            String userId = firebaseAuth.getCurrentUser().getUid();
+            recipeService.isRecipeFavorite(userId, recipe.getId(),
+                    isFavorite -> {
+                        Intent intent = new Intent(this, RecipeDetailActivity.class);
+                        intent.putExtra("recipe_id", recipe.getId());
+                        intent.putExtra("recipe_title", recipe.getTitle());
+                        intent.putExtra("is_favorite", isFavorite);
+                        startActivity(intent);
+                    },
+                    e -> {
+                        Toast.makeText(this, "Failed to check favorites", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, RecipeDetailActivity.class);
+                        intent.putExtra("recipe_id", recipe.getId());
+                        intent.putExtra("recipe_title", recipe.getTitle());
+                        intent.putExtra("is_favorite", false);
+                        startActivity(intent);
+                    }
+            );
 
-            Intent intent = new Intent(this, RecipeDetailActivity.class);
-            intent.putExtra("recipe_id", recipe.getId());
-            intent.putExtra("recipe_title", recipe.getTitle());
-            startActivity(intent);
         });
         rvRecipes.setAdapter(recipeAdapter);
     }
