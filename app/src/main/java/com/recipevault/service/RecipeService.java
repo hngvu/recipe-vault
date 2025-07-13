@@ -48,5 +48,19 @@ public class RecipeService {
         }, onFailure);
     }
 
+    public void isRecipeFavorite(
+            String userId,
+            String recipeId,
+            OnSuccessListener<Boolean> onSuccess,
+            OnFailureListener onFailure
+    ) {
+        userRepository.getById(userId, user -> {
+            List<String> savedRecipes = user.getSavedRecipes();
+            boolean isFavorite = savedRecipes != null && savedRecipes.contains(recipeId);
+            onSuccess.onSuccess(isFavorite);
+        }, onFailure);
+    }
+
+
 
 }
