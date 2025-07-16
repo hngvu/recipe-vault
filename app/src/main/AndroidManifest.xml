@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
-
     <application
         android:name=".RecipeVaultApplication"
         android:allowBackup="true"
@@ -39,15 +38,24 @@
         <activity
             android:name=".activity.AddRecipeActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"
-            />
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.RecipeDetailActivity"
             android:exported="false" />
 
-        <activity android:name=".activity.FavoritesActivity"
+        <activity
+            android:name=".activity.FavoritesActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.SearchActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.PremiumUpgradeActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.ProfileActivity" />
 
         <receiver
             android:name="com.recipevault.receiver.ReminderReceiver"
