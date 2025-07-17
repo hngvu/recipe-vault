@@ -15,10 +15,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Add Recipe"
-            app:titleTextColor="@color/white"
+            android:background="@color/primary_orange"
             app:navigationIcon="@drawable/ic_arrow_back"
-            android:background="@color/primary_orange" />
+            app:title="Add Recipe"
+            app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,10 +40,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -53,9 +53,9 @@
                         android:id="@+id/recipe_image_preview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="Recipe Image"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/placeholder_recipe"
-                        android:contentDescription="Recipe Image" />
+                        android:src="@drawable/placeholder_recipe" />
 
                     <LinearLayout
                         android:id="@+id/add_image_container"
@@ -69,8 +69,8 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_marginBottom="8dp"
-                            android:src="@drawable/ic_camera"
-                            android:contentDescription="Add Photo" />
+                            android:contentDescription="Add Photo"
+                            android:src="@drawable/ic_camera" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -124,14 +124,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
                     android:hint="Cook Time"
                     app:boxStrokeColor="@color/primary_orange"
                     app:hintTextColor="@color/primary_orange"
@@ -148,8 +148,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
                     android:hint="Servings"
                     app:boxStrokeColor="@color/primary_orange"
                     app:hintTextColor="@color/primary_orange">
@@ -168,11 +168,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Difficulty Level"
                 android:textColor="@color/primary_dark"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:textStyle="bold" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group_difficulty"
@@ -214,9 +214,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -229,12 +229,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_ingredient"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add"
                     app:icon="@drawable/ic_add"
-                    app:iconSize="18dp"
-                    style="@style/Widget.Material3.Button.TextButton" />
+                    app:iconSize="18dp" />
 
             </LinearLayout>
 
@@ -242,17 +242,16 @@
                 android:id="@+id/rv_ingredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="8dp"
                 tools:listitem="@layout/item_add_ingredient" />
 
             <!-- Instructions Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -265,12 +264,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_instruction"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add"
                     app:icon="@drawable/ic_add"
-                    app:iconSize="18dp"
-                    style="@style/Widget.Material3.Button.TextButton" />
+                    app:iconSize="18dp" />
 
             </LinearLayout>
 
@@ -279,7 +278,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
-                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_add_instruction" />
 
             <!-- Save Button -->
@@ -312,10 +310,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:menu="@menu/bottom_navigation"
             app:itemIconTint="@color/bottom_nav_color"
             app:itemTextColor="@color/bottom_nav_color"
-            app:labelVisibilityMode="auto" />
+            app:labelVisibilityMode="auto"
+            app:menu="@menu/bottom_navigation" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -326,9 +324,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="Add Recipe"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_add"
+        app:backgroundTint="@color/primary_orange"
         app:layout_anchor="@id/bottom_app_bar"
-        app:tint="@color/white"
-        app:backgroundTint="@color/primary_orange" />
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

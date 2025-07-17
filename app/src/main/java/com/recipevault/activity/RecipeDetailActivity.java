@@ -41,6 +41,8 @@ import com.recipevault.adapter.IngredientsAdapter;
 import com.recipevault.adapter.InstructionsAdapter;
 import com.recipevault.model.Comment;
 import com.recipevault.model.Recipe;
+import com.recipevault.model.IngredientInput;
+import com.recipevault.model.InstructionInput;
 import com.recipevault.service.CommentService;
 import com.recipevault.service.FirestoreService;
 
@@ -325,16 +327,32 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
 
         if (currentRecipe.getIngredients() != null && !currentRecipe.getIngredients().isEmpty()) {
-            ingredientsAdapter.setIngredients(currentRecipe.getIngredients());
+            List<IngredientInput> ingredientInputs = new ArrayList<>();
+            for (String ingredient : currentRecipe.getIngredients()) {
+                String[] parts = ingredient.split(",", 2);
+                if (parts.length > 1) {
+                    ingredientInputs.add(new IngredientInput(parts[0].trim(), parts[1].trim()));
+                } else {
+                    ingredientInputs.add(new IngredientInput(ingredient.trim(), ""));
+                }
+            }
+            ingredientsAdapter.setIngredients(ingredientInputs);
         } else {
-            ingredientsAdapter.setIngredients(java.util.Arrays.asList("No ingredients listed"));
+            List<IngredientInput> placeholder = new ArrayList<>();
+            placeholder.add(new IngredientInput("No ingredients listed", ""));
+            ingredientsAdapter.setIngredients(placeholder);
         }
 
         if (currentRecipe.getInstructions() != null && !currentRecipe.getInstructions().isEmpty()) {
-            instructionsAdapter.setInstructions(currentRecipe.getInstructions());
+            List<InstructionInput> instructionInputs = new ArrayList<>();
+            for (String instruction : currentRecipe.getInstructions()) {
+                instructionInputs.add(new InstructionInput(instruction));
+            }
+            instructionsAdapter.setInstructions(instructionInputs);
         } else {
-            // Set placeholder instructions
-            instructionsAdapter.setInstructions(java.util.Arrays.asList("No instructions provided"));
+            List<InstructionInput> placeholder = new ArrayList<>();
+            placeholder.add(new InstructionInput("No instructions provided"));
+            instructionsAdapter.setInstructions(placeholder);
         }
 
         Log.d("RecipeDetailActivity", "Recipe details displayed successfully");

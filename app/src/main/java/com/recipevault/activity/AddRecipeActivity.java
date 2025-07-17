@@ -19,6 +19,11 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.recipevault.MainActivity;
 import com.recipevault.R;
+import com.recipevault.adapter.InstructionsAdapter;
+import com.recipevault.adapter.IngredientsAdapter;
+
+import com.recipevault.model.IngredientInput;
+import com.recipevault.model.InstructionInput;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
@@ -30,6 +35,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     private MaterialButton btnSaveRecipe, btnAddIngredient, btnAddInstruction;
     private LinearLayout addImageContainer;
     private ImageView recipeImagePreview;
+
+    private IngredientsAdapter ingredientInputAdapter;
+    private InstructionsAdapter instructionInputAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +129,12 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private void setupRecyclerViews() {
         rvIngredients.setLayoutManager(new LinearLayoutManager(this));
+        ingredientInputAdapter = new IngredientsAdapter();
+        rvIngredients.setAdapter(ingredientInputAdapter);
+
         rvInstructions.setLayoutManager(new LinearLayoutManager(this));
+        instructionInputAdapter = new InstructionsAdapter();
+        rvInstructions.setAdapter(instructionInputAdapter);
     }
 
     private void openImagePicker() {
@@ -129,11 +142,11 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     private void addIngredientField() {
-        Toast.makeText(this, "Add ingredient field", Toast.LENGTH_SHORT).show();
+        ingredientInputAdapter.addIngredient(new IngredientInput("", ""));
     }
 
     private void addInstructionField() {
-        Toast.makeText(this, "Add instruction field", Toast.LENGTH_SHORT).show();
+        instructionInputAdapter.addInstruction(new InstructionInput(""));
     }
 
     private void saveRecipe() {
