@@ -13,279 +13,355 @@
         android:layout_marginBottom="80dp"
         android:background="@color/white">
 
-        <!-- Keep all your existing LinearLayout content here -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Profile Content -->
+            <!-- Profile Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
 
-                <!-- Profile Header -->
+                <ImageView
+                    android:id="@+id/iv_profile_picture"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/circle_background_orange"
+                    android:src="@drawable/ic_person"
+                    android:scaleType="centerInside"
+                    android:padding="20dp"
+                    android:contentDescription="Profile Picture" />
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="32dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/iv_profile_picture"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/circle_background_orange"
-                        android:src="@drawable/ic_person"
-                        android:scaleType="centerInside"
-                        android:padding="20dp"
-                        android:contentDescription="Profile Picture" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="John Doe"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_dark" />
 
-                        <TextView
-                            android:id="@+id/tv_user_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="John Doe"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_dark" />
-
-                        <TextView
-                            android:id="@+id/tv_user_email"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="john.doe@example.com"
-                            android:textSize="14sp"
-                            android:textColor="@color/gray"
-                            android:layout_marginTop="4dp" />
-
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="john.doe@example.com"
+                        android:textSize="14sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="4dp" />
 
                 </LinearLayout>
 
-                <!-- Profile Stats -->
+            </LinearLayout>
+
+            <!-- Premium Status Chip -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_premium_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Free User"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                app:chipBackgroundColor="@color/gray_medium" />
+
+            <!-- Profile Stats -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="32dp">
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="32dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:text="15"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_orange" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="15"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_orange" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Recipes"
-                            android:textSize="12sp"
-                            android:textColor="@color/gray" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="8"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_orange" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Favorites"
-                            android:textSize="12sp"
-                            android:textColor="@color/gray" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="23"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/primary_orange" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Followers"
-                            android:textSize="12sp"
-                            android:textColor="@color/gray" />
-
-                    </LinearLayout>
+                        android:text="Recipes"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray" />
 
                 </LinearLayout>
 
-                <!-- Profile Options -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_orange" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Favorites"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_orange" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Followers"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Premium Upgrade Button -->
+            <LinearLayout
+                android:id="@+id/btn_upgrade_premium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_star"
+                    android:layout_marginEnd="16dp"
+                    app:tint="@color/primary_orange"
+                    android:contentDescription="Upgrade to Premium" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Account Settings"
+                        android:text="Upgrade to Premium"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/primary_dark"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="@color/primary_orange" />
 
-                    <!-- Edit Profile Button -->
-                    <LinearLayout
-                        android:id="@+id/btn_edit_profile"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
+                        android:text="Unlock exclusive features"
+                        android:textSize="14sp"
+                        android:textColor="@color/gray_dark" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_person"
-                            android:layout_marginEnd="16dp"
-                            android:contentDescription="Edit Profile" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Edit Profile"
-                            android:textSize="16sp"
-                            android:textColor="@color/primary_dark" />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:rotation="180"
+                    app:tint="@color/gray" />
 
-                    </LinearLayout>
+            </LinearLayout>
 
-                    <!-- My Recipes Button -->
-                    <LinearLayout
-                        android:id="@+id/btn_my_recipes"
-                        android:layout_width="match_parent"
+            <!-- Manage Premium Button (Initially Hidden) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_manage_premium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Manage Premium"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                app:backgroundTint="@color/primary_orange"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_star"
+                app:iconGravity="textStart" />
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_light"
+                android:layout_marginVertical="16dp" />
+
+            <!-- Profile Options -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Account Settings"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Edit Profile Button -->
+                <LinearLayout
+                    android:id="@+id/btn_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_person"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="Edit Profile" />
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
+                        android:layout_weight="1"
+                        android:text="Edit Profile"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_dark" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/placeholder_recipe"
-                            android:layout_marginEnd="16dp"
-                            android:contentDescription="My Recipes" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="My Recipes"
-                            android:textSize="16sp"
-                            android:textColor="@color/primary_dark" />
+                <!-- My Recipes Button -->
+                <LinearLayout
+                    android:id="@+id/btn_my_recipes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true">
 
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/placeholder_recipe"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="My Recipes" />
 
-                    <!-- Settings Button -->
-                    <LinearLayout
-                        android:id="@+id/btn_settings"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true">
+                        android:layout_weight="1"
+                        android:text="My Recipes"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_dark" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_person"
-                            android:layout_marginEnd="16dp"
-                            android:contentDescription="Settings" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Settings"
-                            android:textSize="16sp"
-                            android:textColor="@color/primary_dark" />
+                <!-- Settings Button -->
+                <LinearLayout
+                    android:id="@+id/btn_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true">
 
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_person"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="Settings" />
 
-                    <!-- Sign Out Button -->
-                    <LinearLayout
-                        android:id="@+id/btn_sign_out"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_marginTop="32dp">
+                        android:layout_weight="1"
+                        android:text="Settings"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_dark" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_arrow_back"
-                            android:layout_marginEnd="16dp"
-                            android:contentDescription="Sign Out" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Sign Out"
-                            android:textSize="16sp"
-                            android:textColor="@color/error_red" />
+                <!-- Sign Out Button -->
+                <LinearLayout
+                    android:id="@+id/btn_sign_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginTop="32dp">
 
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_back"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="Sign Out" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sign Out"
+                        android:textSize="16sp"
+                        android:textColor="@color/error_red" />
 
                 </LinearLayout>
 

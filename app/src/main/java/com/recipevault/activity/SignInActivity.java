@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -45,6 +46,7 @@ public class SignInActivity extends AppCompatActivity {
     @Inject
     FirestoreService firestoreService;
     private Button btnSignIn;
+    private TextView tvSignUp;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -72,6 +74,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private void initViews() {
         btnSignIn = findViewById(R.id.btnGoogleSignIn);
+        tvSignUp = findViewById(R.id.tvSignUp);
     }
 
     private void configureGoogleSignIn() {
@@ -86,6 +89,10 @@ public class SignInActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         btnSignIn.setOnClickListener(v -> signIn());
+        tvSignUp.setOnClickListener(v -> {
+            Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void checkIfAlreadySignedIn() {

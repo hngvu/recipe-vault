@@ -14,10 +14,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.recipevault.MainActivity;
 import com.recipevault.R;
+import com.recipevault.service.PremiumService;
 
 import javax.inject.Inject;
 
@@ -28,10 +31,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private TextView tvUserName, tvUserEmail;
-    private LinearLayout btnSignOut, btnEditProfile, btnMyRecipes, btnSettings;
+    private LinearLayout btnSignOut, btnEditProfile, btnMyRecipes, btnSettings, btnUpgradePremium;
+    private Chip chipPremiumStatus;
+    private MaterialButton btnManagePremium;
     private GoogleSignInClient googleSignInClient;
+
     @Inject
     FirebaseAuth firebaseAuth;
+    @Inject
+    PremiumService premiumService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         setupBottomNavigation();
         setupClickListeners();
         loadUserData();
+        checkPremiumStatus();
     }
 
     private void initViews() {
@@ -53,6 +62,9 @@ public class ProfileActivity extends AppCompatActivity {
         btnEditProfile = findViewById(R.id.btn_edit_profile);
         btnMyRecipes = findViewById(R.id.btn_my_recipes);
         btnSettings = findViewById(R.id.btn_settings);
+        btnUpgradePremium = findViewById(R.id.btn_upgrade_premium);
+        chipPremiumStatus = findViewById(R.id.chip_premium_status);
+        btnManagePremium = findViewById(R.id.btn_manage_premium);
     }
 
     private void setupGoogleSignIn() {
@@ -69,13 +81,23 @@ public class ProfileActivity extends AppCompatActivity {
         btnSignOut.setOnClickListener(v -> signOut());
 
         btnEditProfile.setOnClickListener(v ->
-            Toast.makeText(this, "Edit Profile feature coming soon", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Edit Profile feature coming soon", Toast.LENGTH_SHORT).show());
 
         btnMyRecipes.setOnClickListener(v ->
-            Toast.makeText(this, "My Recipes feature coming soon", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "My Recipes feature coming soon", Toast.LENGTH_SHORT).show());
 
         btnSettings.setOnClickListener(v ->
-            Toast.makeText(this, "Settings feature coming soon", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Settings feature coming soon", Toast.LENGTH_SHORT).show());
+
+        btnUpgradePremium.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PremiumUpgradeActivity.class);
+            startActivity(intent);
+        });
+
+        btnManagePremium.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PremiumUpgradeActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadUserData() {
@@ -93,6 +115,46 @@ public class ProfileActivity extends AppCompatActivity {
 
             tvUserName.setText(userName);
             tvUserEmail.setText(userEmail);
+        }
+    }
+
+    private void checkPremiumStatus() {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) return;
+
+        String userId = currentUser.getUid();
+
+        premiumService.isPremiumUser(userId,
+                isPremium -> {
+                    updatePremiumUI(isPremium);
+                },
+                error -> {
+                    // Handle error - default to non-premium
+                    updatePremiumUI(false);
+                }
+        );
+    }
+
+    private void updatePremiumUI(boolean isPremium) {
+        if (isPremium) {
+            // User is premium
+            chipPremiumStatus.setText("Premium Member");
+            chipPremiumStatus.setChipBackgroundColorResource(R.color.primary_orange);
+            chipPremiumStatus.setTextColor(getColor(R.color.white));
+            chipPremiumStatus.setVisibility(android.view.View.VISIBLE);
+
+            btnUpgradePremium.setVisibility(android.view.View.GONE);
+            btnManagePremium.setVisibility(android.view.View.VISIBLE);
+            btnManagePremium.setText("Manage Premium");
+        } else {
+            // User is not premium
+            chipPremiumStatus.setText("Free User");
+            chipPremiumStatus.setChipBackgroundColorResource(R.color.gray_medium);
+            chipPremiumStatus.setTextColor(getColor(R.color.white));
+            chipPremiumStatus.setVisibility(android.view.View.VISIBLE);
+
+            btnUpgradePremium.setVisibility(android.view.View.VISIBLE);
+            btnManagePremium.setVisibility(android.view.View.GONE);
         }
     }
 
@@ -131,21 +193,26 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.nav_search) {
-                // TODO: Navigate to SearchActivity when implemented
-                // For now, show a message
-                return false;
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
             } else if (itemId == R.id.nav_add) {
                 startActivity(new Intent(this, AddRecipeActivity.class));
                 return true;
             } else if (itemId == R.id.nav_favorites) {
-                // TODO: Navigate to FavoritesActivity when implemented
-                // For now, show a message
-                return false;
+                startActivity(new Intent(this, FavoritesActivity.class));
+                return true;
             } else if (itemId == R.id.nav_profile) {
                 return true; // Already on profile
             }
 
             return false;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh premium status when returning to profile
+        checkPremiumStatus();
     }
 }

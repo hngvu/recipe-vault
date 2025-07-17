@@ -1,6 +1,7 @@
 package com.recipevault.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,6 +67,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private Button btnSubmitRating;
     private TextInputEditText etComment;
+    private Button btnSetReminder;
 
     private boolean isFavorite = false;
     private String recipeId;
@@ -78,6 +82,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     @Inject
     CommentService commentService;
+
+    private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +150,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         etComment = findViewById(R.id.et_comment);
         tvCommentsCount = findViewById(R.id.tv_comments_count);
         tvNoComments = findViewById(R.id.tv_no_comments);
+        btnSetReminder = findViewById(R.id.btn_set_reminder);
     }
 
     private void setupToolbar() {
@@ -178,12 +185,79 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         fabFavorite.setOnClickListener(v -> toggleFavorite());
-        
         ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             tvRatingText.setText(String.format("%.1f", rating));
         });
-        
         btnSubmitRating.setOnClickListener(v -> submitRatingAndComment());
+        btnSetReminder.setOnClickListener(v -> checkAndRequestExactAlarmPermission());
+    }
+
+    private void checkAndRequestExactAlarmPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            android.app.AlarmManager alarmManager = (android.app.AlarmManager) getSystemService(android.content.Context.ALARM_SERVICE);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                // Prompt user to allow exact alarms in system settings
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Allow Exact Alarms")
+                    .setMessage("To set reminders, please allow exact alarms for Recipe Vault in system settings.")
+                    .setPositiveButton("Go to Settings", (dialog, which) -> {
+                        Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                        intent.setData(android.net.Uri.parse("package:" + getPackageName()));
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+                return;
+            }
+        }
+        checkAndRequestNotificationPermission();
+    }
+
+    private void checkAndRequestNotificationPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_POST_NOTIFICATIONS);
+            } else {
+                showTimePickerDialog();
+            }
+        } else {
+            showTimePickerDialog();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_POST_NOTIFICATIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showTimePickerDialog();
+            } else {
+                Toast.makeText(this, "Notification permission denied. Cannot set reminder.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showTimePickerDialog() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        int hour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(java.util.Calendar.MINUTE);
+        android.app.TimePickerDialog timePickerDialog = new android.app.TimePickerDialog(this, (view, hourOfDay, minute1) -> {
+            calendar.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(java.util.Calendar.MINUTE, minute1);
+            calendar.set(java.util.Calendar.SECOND, 0);
+            scheduleReminder(calendar.getTimeInMillis());
+        }, hour, minute, true);
+        timePickerDialog.show();
+    }
+
+    private void scheduleReminder(long triggerAtMillis) {
+        android.app.AlarmManager alarmManager = (android.app.AlarmManager) getSystemService(android.content.Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, com.recipevault.receiver.ReminderReceiver.class);
+        intent.putExtra("recipeTitle", recipeTitle);
+        intent.putExtra("recipeId", recipeId);
+        android.app.PendingIntent pendingIntent = android.app.PendingIntent.getBroadcast(this, recipeId.hashCode(), intent, android.app.PendingIntent.FLAG_UPDATE_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
+        Toast.makeText(this, "Reminder set!", Toast.LENGTH_SHORT).show();
     }
 
     private void loadRecipeDetails() {
