@@ -179,34 +179,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                app:selectionRequired="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_easy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Easy"
+                    android:checked="true"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     app:chipBackgroundColor="@color/chip_background_selector"
                     app:chipStrokeColor="@color/primary_orange"
-                    app:chipStrokeWidth="1dp" />
+                    app:chipStrokeWidth="1dp"
+                    android:textColor="@color/chip_text_color" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Medium"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     app:chipBackgroundColor="@color/chip_background_selector"
                     app:chipStrokeColor="@color/primary_orange"
-                    app:chipStrokeWidth="1dp" />
+                    app:chipStrokeWidth="1dp"
+                    android:textColor="@color/chip_text_color" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_hard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hard"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     app:chipBackgroundColor="@color/chip_background_selector"
                     app:chipStrokeColor="@color/primary_orange"
-                    app:chipStrokeWidth="1dp" />
+                    app:chipStrokeWidth="1dp"
+                    android:textColor="@color/chip_text_color" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -277,7 +285,7 @@
                 android:id="@+id/rv_instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="1dp"
                 tools:listitem="@layout/item_add_instruction" />
 
             <!-- Save Button -->

@@ -12,8 +12,8 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/nav_add"
         android:icon="@drawable/ic_add"
+        android:id="@+id/nav_add"
         android:title="Add" />
 
     <item

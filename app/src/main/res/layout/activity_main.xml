@@ -80,8 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/black"
-        app:menu="@menu/bottom_navigation"
         app:itemIconTint="@color/bottom_nav_icon_selector"
-        app:labelVisibilityMode="unlabeled" />
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
