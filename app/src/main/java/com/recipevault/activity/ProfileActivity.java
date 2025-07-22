@@ -80,14 +80,18 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnSignOut.setOnClickListener(v -> signOut());
 
-        btnEditProfile.setOnClickListener(v ->
-                Toast.makeText(this, "Edit Profile feature coming soon", Toast.LENGTH_SHORT).show());
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditProfileActivity.class);
+            startActivity(intent);
+        });
 
         btnMyRecipes.setOnClickListener(v ->
                 Toast.makeText(this, "My Recipes feature coming soon", Toast.LENGTH_SHORT).show());
 
-        btnSettings.setOnClickListener(v ->
-                Toast.makeText(this, "Settings feature coming soon", Toast.LENGTH_SHORT).show());
+        btnSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
         btnUpgradePremium.setOnClickListener(v -> {
             Intent intent = new Intent(this, PremiumUpgradeActivity.class);
@@ -212,7 +216,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh premium status when returning to profile
+        // Refresh user data and premium status when returning to profile
+        loadUserData();
         checkPremiumStatus();
     }
 }

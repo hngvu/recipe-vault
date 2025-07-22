@@ -131,7 +131,7 @@ public class PremiumService {
 
         return updatePremiumSubscription(userId, updates)
                 .addOnSuccessListener(aVoid -> {
-                    // Update user status as well
+                    // Update user status
                     updateUserPremiumStatus(userId, false);
                 });
     }
