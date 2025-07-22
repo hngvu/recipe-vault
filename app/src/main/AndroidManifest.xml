@@ -57,6 +57,15 @@
             android:exported="false"
             android:parentActivityName=".activity.ProfileActivity" />
 
+        <activity
+            android:name=".activity.EditProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.ProfileActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.ProfileActivity" />
         <receiver
             android:name="com.recipevault.receiver.ReminderReceiver"
             android:exported="false" />
