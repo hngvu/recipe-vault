@@ -82,7 +82,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final String UPLOAD_API_URL = "https://freeimage.host/api/1/upload";
-    private static final String API_KEY = "YOUR_API_KEY"; // Replace with your actual API key
+    private static final String API_KEY = "6d207e02198a847aa98d0a2a901485a5"; // Replace with your actual API key
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
